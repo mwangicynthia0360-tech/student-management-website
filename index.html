@@ -30,6 +30,37 @@
     </div>
    </section>
 
+    <section id="dashboard" class="section">
+      <h2>Welcome to the Dashboard</h2>
+      <p class="section-intro">Here is a quick overview of your students.</p>
+
+      <div class="card">
+        <div class="card">
+          <h3>Total Students</h3>
+          <p class="number" id="totalStudents">0</p>
+        </div>
+        <div class="card">
+          <h3>Passed</h3>
+          <p class="number" id="passedStudents">0</p>
+        </div>
+        <div class="card">
+          <h3>Failed</h3>
+          <p class="number" id="failedStudents">0</p>
+        </div>
+        <div class="card">
+          <h3>Average Marks</h3>
+          <p class="number" id="averageMarks">0</p>
+        </div>
+      </div>
+    </section>
+
+<div class="search">
+     <h2>Search student</h2>
+  <input type="text" id="searchInput" placeholder="Enter a student name">
+  <button id="searchBtn">Search</button>
+  <button id="clearBtn">Clear</button>
+  <div id="searchResult"></div>
+</div>
 
     <form>
     <h2>Register new student:</h2>
@@ -59,7 +90,27 @@
     </div>
 </form>
 
-<div class="content">
+<div class="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Full Name</th>
+              <th>Age</th>
+              <th>Gender</th>
+              <th>Course</th>
+              <th>Marks</th>
+              <th>Performance</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="studentTableBody">
+           
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="content">
 <button type="next">NEXT</button>
 </div>
 
