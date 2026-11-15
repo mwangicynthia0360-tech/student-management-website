@@ -1,0 +1,83 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(128, 61, 102);
+    color: white;
+    height: 100px;
+}
+
+header> h1{
+    color: black;
+    font-size: 60px;
+}
+nav>ul>li {
+    margin: 10px;
+    list-style: none;
+}
+nav>ul>li>a {
+    text-decoration: none;
+    color: rgb(240, 4, 15);
+    font-weight: bolder;
+    transition: color 0.3s ease;
+}
+nav>ul>li>a:hover{
+    color: rgb(241, 238, 8);
+    margin: 3px;
+}
+
+.card> h2 {
+font-size: 30px;
+color: rgb(96, 28, 160);
+}
+
+.card> p {
+font-size: 18px;
+font-style: italic;
+}
+
+.card {
+    border: 1px solid rgb(110, 44, 96);
+    margin: 20px;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 5px 5px 5px rgb(211, 20, 163);
+    width: 1000px;
+    word-spacing: 4px;  
+}
+
+.card >ul>li {
+    font-size: 18px;
+    font-style: italic;
+}
+
+.card> h3 {
+    font-size: 22px;
+    color: brown;
+}
+
+.input {
+    border: 1px solid rgb(153, 26, 100);
+    margin: 10px;
+    border-radius: 5px;
+    padding: 5px;
+    box-shadow: 5px 5px 5px rgb(201, 9, 185);
+    width: 250px;
+}
+
+.input >label {
+    font-size: 18px;
+    font-style:italic;
+}
+
+.contact {
+    font-size: 20px;
+    word-spacing: 4px;
+    padding: 20px;
+    margin: 20px;
+}
