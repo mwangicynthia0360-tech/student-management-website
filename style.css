@@ -86,6 +86,15 @@ font-style: italic;
     width: 1000px;
     word-spacing: 4px;  
 }
+.card-1 {
+     border: 1px solid rgb(110, 44, 96);
+    margin: 20px;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 5px 5px 5px rgb(211, 20, 163);
+    width: 700px;
+    word-spacing: 4px; 
+}
 
 .card >ul>li {
     font-size: 18px;
@@ -96,6 +105,22 @@ font-style: italic;
     font-size: 22px;
     color: brown;
 }
+
+.table {
+     border: 1px solid rgb(110, 44, 96);
+    margin: 20px;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 5px 5px 5px rgb(211, 20, 163);
+    width: 1000px;
+    word-spacing: 5px; 
+}
+.table> th {
+    margin: 20px;
+    padding: 20px;
+    word-spacing: 5px;
+}
+
 .search {
     border: 1px solid rgb(153, 26, 100);
     margin: 10px;
