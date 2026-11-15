@@ -31,6 +31,42 @@ nav>ul>li>a:hover{
     margin: 3px;
 }
 
+.hero {
+    background-image: linear-gradient(rgba(194, 153, 180, 0.5), rgb(112, 94, 94)), url(healthcare\ symbol.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 80vh;
+    text-align: center;
+    padding: 6rem;
+}
+.hero>h1 {
+    color: #fff;
+    font-size: 3rem;
+}
+
+.hero>p {
+    color: #fff;
+    font-size: 25px;
+}
+
+.button {
+     margin: 5px;
+    padding: 5px;
+    background-color: rgb(218, 40, 8);
+    border: none;
+    width: 90px;
+    border-radius: 5px;
+    color: white;
+    height: 30px;
+    cursor: pointer;
+}
+.button:hover{
+     background-color: #fff;
+    color: rgb(218, 124, 8);
+    margin: 3px;
+}
+
 .card> h2 {
 font-size: 30px;
 color: rgb(96, 28, 160);
