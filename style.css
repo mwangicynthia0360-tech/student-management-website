@@ -59,17 +59,23 @@ nav>ul>li>a:hover{
     font-size: 25px;
 }
 
+.container {
+    display: flex;
+    gap: 90px;
+    justify-content: center; 
+}
+
 .button {
-     margin: 5px;
+    margin: 5px;
     padding: 5px;
     background-color: rgb(218, 40, 8);
     border: none;
     width: 90px;
     border-radius: 5px;
     color: white;
-    height: 30px;
-    cursor: pointer;
+    height: 30px;   
 }
+
 .button:hover{
      background-color: #fff;
     color: rgb(218, 124, 8);
