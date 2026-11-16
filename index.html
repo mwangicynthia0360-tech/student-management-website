@@ -79,7 +79,7 @@
 
     <div class="input">
         <label for="gender">Gender</label>
-        <input type="number" name="gender" id="gender" placeholder="Enter student's gender">
+        <input type="text" name="gender" id="gender" placeholder="Enter student's gender">
     </div>
 
     <div class="input">
@@ -93,11 +93,22 @@
     </div>
 
     <p id="message"></p>
-    
+
     <div class="button">
        <button type="submit">Add student</button>
     </div>
 </form>
+
+<p id="summary"></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th><th>Age</th><th>Gender</th>
+      <th>Course</th><th>Marks</th><th>Action</th>
+    </tr>
+  </thead>
+  <tbody id="studentList"></tbody>
+</table>
 
 <div id="studentList" class="table">
         <table>
