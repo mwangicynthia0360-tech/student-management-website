@@ -1,239 +1,107 @@
-let studentfullname = prompt("Enter student full name");
-alert("This field cannot be empty. Please try again.");
-let course = prompt("Enter course");
-alert("This field cannot be empty. Please try again.");
-let marks = prompt("Enter marks");
-alert("This field cannot be empty. Please try again.");
+// ===== STEP 1: Data =====
+let students = [];
+let nextId = 1;
 
+// ===== STEP 2: Connect to the HTML =====
+const form = document.getElementById("studentForm");
+const list = document.getElementById("studentList");
+const searchBox = document.getElementById("search");
+const summary = document.getElementById("summary");
+const message = document.getElementById("message");
 
-console.log("studentfullname " + studentfullname);
-console.log("course " + course);
-console.log("marks " + marks);
-
-function getPerformance(marks) {
-  if (marks >= 80) return "Excellent";
-  else if (marks >= 70) return "Very Good";
-  else if (marks >= 60) return "Good";
-  else if (marks >= 50) return "Average";
-  else return "Failed";
+// ===== STEP 3: Save and load =====
+function save() {
+  try {
+    localStorage.setItem("students", JSON.stringify(students));
+  } catch (e) {}
 }
 
-function getPerformanceClass(performance) {
-  return "perf-" + performance.toLowerCase().replace(" ", "-");
+function load() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("students"));
+    if (Array.isArray(saved)) students = saved;
+  } catch (e) {}
+  nextId = students.reduce((max, s) => Math.max(max, s.id), 0) + 1;
 }
 
-let searchText = "";
+// ===== STEP 4 and 5: Draw the table and the summary =====
+function render() {
+  const term = searchBox.value.trim().toLowerCase();
 
-let students = JSON.parse(localStorage.getItem("students")) || [];
+  const shown = students.filter(s =>
+    s.name.toLowerCase().includes(term) ||
+    s.course.toLowerCase().includes(term)
+  );
 
+  list.innerHTML = "";
 
-let nextId = students.length > 0 ? Math.max(...students.map(s => s.id)) + 1 : 1;
+  if (shown.length === 0) {
+    list.innerHTML = '<tr><td colspan="5">No students found.</td></tr>';
+  }
 
-function saveStudents() {
-  localStorage.setItem("students", JSON.stringify(students));
-}
+  shown.forEach(s => {
+    const row = document.createElement("tr");
 
-function showMessage(element, text, type) {
-  if (!element) return;
-  element.textContent = text;
-  element.className = "message " + type; 
-}
-const studentForm = document.getElementById("Form");
-const formMessage = document.getElementById("formMessage");
-const tableBody = document.getElementById("studentTable");
-const searchInput = document.getElementById("searchInput");
-const searchMessage = document.getElementById("searchMessage");
-const clearAllBtn = document.getElementById("clearAllBtn");
+    [s.name, s.course, s.age, s.grade].forEach(value => {
+      const cell = document.createElement("td");
+      cell.textContent = value;
+      row.appendChild(cell);
+    });
 
-function getVisibleStudents() {
-  let list = students.filter(function (student) {
-    const matchesName = student.name.toLowerCase().includes(searchText.toLowerCase());
-    const matchesCourse = selectedCourse === "All" || student.course === selectedCourse;
-    return matchesName && matchesCourse;
+    const actionCell = document.createElement("td");
+    const btn = document.createElement("button");
+    btn.textContent = "Delete";
+    btn.addEventListener("click", () => deleteStudent(s.id));
+    actionCell.appendChild(btn);
+    row.appendChild(actionCell);
+
+    list.appendChild(row);
   });
 
-  if (sortHighToLow) {
-    list = list.slice().sort((a, b) => b.marks - a.marks);
-  
-  return list;
+  if (students.length > 0) {
+    const total = students.reduce((sum, s) => sum + s.grade, 0);
+    summary.textContent =
+      students.length + " student(s) · average grade " +
+      (total / students.length).toFixed(1);
+  } else {
+    summary.textContent = "";
   }
 }
 
-function displayStudents(){
-  if (!tableBody) return; // this page has no table
-  const list = getVisibleStudents();
-  tableBody.innerHTML = "";
-}
-  // Message when nothing is found
-  if (list.length === 0) {
-    const text = students.length === 0 ? "No students registered yet." : "No matching student found.";
-    tableBody.innerHTML = '<tr><td colspan="7">' + text + "</td></tr>";
-    showMessage(searchMessage, searchText || selectedCourse !== "All" ? "No matching student found." : "", "error");
+// ===== STEP 6: Add a student =====
+form.addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  const name = document.getElementById("name").value.trim();
+  const course = document.getElementById("course").value.trim();
+  const age = Number(document.getElementById("age").value);
+  const grade = Number(document.getElementById("grade").value);
+
+  if (name === "" || course === "") {
+    message.textContent = "Please fill in every field.";
     return;
   }
-  showMessage(searchMessage, "", "");
-
-  for (let i = 0; i < list.length; i++) {
-    const student = list[i];
-    const performance = getPerformance(student.marks);
-
-    const row = document.createElement("tr");
-    row.innerHTML =
-      "<td>" + escapeHTML(student.name) + "</td>" +
-      "<td>" + student.age + "</td>" +
-      "<td>" + student.gender + "</td>" +
-      "<td>" + student.course + "</td>" +
-      "<td>" + student.marks + "</td>" +
-      '<td><span class="badge ' + getPerformanceClass(performance) + '">' + performance + "</span></td>" +
-      "<td>" +
-      '<button class="btn-update" data-id="' + student.id + '">Update</button> ' +
-      '<button class="btn-delete" data-id="' + student.id + '">Delete</button>' +
-      "</td>";
-    tableBody.appendChild(row);
+  if (grade < 0 || grade > 100) {
+    message.textContent = "Grade must be between 0 and 100.";
+    return;
   }
 
-function updateStatistics() {
-  const total = students.length;
-  let passed = 0;
-  let failed = 0;
-  let sum = 0;
-  const counts = { "Excellent": 0, "Very Good": 0, "Good": 0, "Average": 0, "Failed": 0 };
-  let highest = null;
-  let lowest = null;
+  message.textContent = "";
+  students.push({ id: nextId++, name, course, age, grade });
+  save();
+  render();
+  form.reset();
+});
 
-  for (let i = 0; i < students.length; i++) {
-    const s = students[i];
-    sum += s.marks;
-    if (s.marks >= 50) passed++; else failed++;
-    counts[getPerformance(s.marks)]++;
-    if (highest === null || s.marks > highest.marks) highest = s;
-    if (lowest === null || s.marks < lowest.marks) lowest = s;
-  }
-
-  const average = total > 0 ? (sum / total).toFixed(1) : 0;
-
-  setText("totalStudents", total);
-  setText("passedStudents", passed);
-  setText("failedStudents", failed);
-  setText("averageMarks", average);
-  setText("highestStudent", highest ? highest.name + " (" + highest.marks + ")" : "-");
-  setText("lowestStudent", lowest ? lowest.name + " (" + lowest.marks + ")" : "-");
-
-  setText("countExcellent", counts["Excellent"]);
-  setText("countVeryGood", counts["Very Good"]);
-  setText("countGood", counts["Good"]);
-  setText("countAverage", counts["Average"]);
-  setText("countFailed", counts["Failed"]);
-}
-function refreshPage() {
-  displayStudents();
-  updateStatistics();
+// ===== STEP 7: Delete a student =====
+function deleteStudent(id) {
+  students = students.filter(s => s.id !== id);
+  save();
+  render();
 }
 
-if (studentForm) {
-  studentForm.addEventListener("submit", function (event) {
-    event.preventDefault(); // stop the page from reloading
+// ===== STEP 8: Search and start the app =====
+searchBox.addEventListener("input", render);
 
-    const name = document.getElementById("fullName").value.trim();
-    const age = Number(document.getElementById("age").value);
-    const gender = document.getElementById("gender").value;
-    const course = document.getElementById("course").value;
-    const marksValue = document.getElementById("marks").value.trim();
-    const marks = Number(marksValue);
-
-    
-    if (name === "" || gender === "" || course === "" || marksValue === "" || document.getElementById("age").value === "") {
-      showMessage(formMessage, "Please fill in all fields.", "error");
-      return;
-    }
-    if (isNaN(age) || age < 1 || age > 120) {
-      showMessage(formMessage, "Age must be a valid number.", "error");
-      return;
-    }
-    if (isNaN(marks) || marks < 0 || marks > 100) {
-      showMessage(formMessage, "Marks must be between 0 and 100.", "error");
-      return;
-    }
-
-    
-    const newStudent = { id: nextId, name: name, age: age, gender: gender, course: course, marks: marks };
-    nextId++;
-    students.push(newStudent);
-
-    saveStudents();
-    refreshPage();
-    studentForm.reset();
-    showMessage(formMessage, name + " was registered successfully!", "success");
-  });
-}
-if (searchInput) {
-  searchInput.addEventListener("input", function () {
-    searchText = searchInput.value.trim();
-    displayStudents();
-  });
-}
-
-if (tableBody) {
-  tableBody.addEventListener("click", function (event) {
-    const id = Number(event.target.getAttribute("data-id"));
-    if (!id) return;
-
-    // DELETE
-    if (event.target.classList.contains("btn-delete")) {
-      const sure = confirm("Are you sure you want to delete this student?");
-      if (sure) {
-        students = students.filter(s => s.id !== id);
-        saveStudents();
-        refreshPage();
-      }
-    }
-
-    
-    if (event.target.classList.contains("btn-update")) {
-      const input = prompt("Enter the new marks (0 - 100):");
-      if (input === null) return; // user pressed Cancel
-      const newMarks = Number(input);
-
-      if (input.trim() === "" || isNaN(newMarks) || newMarks < 0 || newMarks > 100) {
-        alert("Invalid marks. Enter a number between 0 and 100.");
-        return;
-      }
-      const student = students.find(s => s.id === id);
-      student.marks = newMarks;
-      saveStudents();
-      refreshPage();
-    }
-  });
-}
-
-const contactForm = document.getElementById("contactForm");
-const contactFeedback = document.getElementById("contactFeedback");
-
-if (contactForm) {
-  contactForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    const name = document.getElementById("contactName").value.trim();
-    const email = document.getElementById("contactEmail").value.trim();
-    const subject = document.getElementById("contactSubject").value.trim();
-    const message = document.getElementById("contactMessage").value.trim();
-
-    if (name === "" || email === "" || subject === "" || message === "") {
-      showMessage(contactFeedback, "All fields are required.", "error");
-      return;
-    }
-    // email must contain @ and a dot after it
-    if (!email.includes("@") || !email.includes(".") || email.indexOf("@") > email.lastIndexOf(".")) {
-      showMessage(contactFeedback, "Please enter a valid email address.", "error");
-      return;
-    }
-    if (message.length < 10) {
-      showMessage(contactFeedback, "Message must be at least 10 characters long.", "error");
-      return;
-    }
-
-    showMessage(contactFeedback, "Thank you, your message has been sent.", "success");
-    contactForm.reset();
-  });
-}
-
+load();
+render();
