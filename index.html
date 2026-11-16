@@ -57,7 +57,7 @@
       </div>
     </section>
 
-<div class="search">
+<div id="search" class="search">
      <h2>Search student</h2>
   <input type="text" id="searchInput" placeholder="Enter a student name">
   <button id="searchBtn">Search</button>
@@ -65,38 +65,41 @@
   <div id="searchResult"></div>
 </div>
 
-    <form>
+    <form id="studentForm">
     <h2>Register new student:</h2>
     <div class="input">
-        <label for="student full name">Student Full Name</label>
-        <input type="student full name" name="student full name" id="student full name" placeholder="Enter student's full name">
+        <label for="fullName">Student Full Name</label>
+        <input type="text" name="fullName" id="fullName" placeholder="Enter student's full name">
     </div>
 
     <div class="input">
         <label for="age">Age</label>
-        <input type="age" name="age" id="age" placeholder="Enter student's age">
+        <input type="number" name="age" id="age" placeholder="Enter student's age">
     </div>
 
     <div class="input">
         <label for="gender">Gender</label>
-        <input type="age" name="gender" id="gender" placeholder="Enter student's gender">
+        <input type="number" name="gender" id="gender" placeholder="Enter student's gender">
     </div>
 
     <div class="input">
         <label for="course">Course</label>
-        <input type="course" name="course" id="course" placeholder="Enter course">
+        <input type="text" name="course" id="course" placeholder="Enter course">
     </div>
 
     <div class="input">
         <label for="marks">Marks</label>
-        <input type="marks" name="marks" id="marks" placeholder="Enter marks">
+        <input type="number" name="marks" id="marks" placeholder="Enter marks">
     </div>
+
+    <p id="message"></p>
+    
     <div class="button">
        <button type="submit">Add student</button>
     </div>
 </form>
 
-<div class="table">
+<div id="studentList" class="table">
         <table>
           <thead>
             <tr>

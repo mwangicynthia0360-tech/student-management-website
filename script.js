@@ -5,9 +5,7 @@ let nextId = 1;
 // ==Connect to the HTML ==
 const form = document.getElementById("studentForm");
 const list = document.getElementById("studentList");
-const searchBox = document.getElementById("search");
-const summary = document.getElementById("summary");
-const message = document.getElementById("message");
+
 
 // ==Save and load ==
 function save() {
@@ -23,15 +21,50 @@ function load() {
   } catch (e) {}
   nextId = students.reduce((max, s) => Math.max(max, s.id), 0) + 1;
 }
+// == Search section ==
+const searchInput = document.getElementById("searchInput");
+const searchBtn = document.getElementById("searchBtn");
+const clearBtn = document.getElementById("clearBtn");
+const searchResult = document.getElementById("searchResult");
+
+function searchStudents() {
+  const term = searchInput.value.trim().toLowerCase();
+
+  if (term === "") {
+    searchResult.textContent = "Please enter a name to search.";
+    return;
+  }
+
+  const found = students.filter(s =>
+    s.name.toLowerCase().includes(term)
+  );
+
+  searchResult.innerHTML = "";
+
+  if (found.length === 0) {
+    searchResult.textContent = "No student found.";
+    return;
+  }
+
+  found.forEach(s => {
+    const p = document.createElement("p");
+    p.textContent =
+      s.name + " | " + s.course + " | Age " + s.age + " | Grade " + s.grade;
+    searchResult.appendChild(p);
+  });
+}
+
+function clearSearch() {
+  searchInput.value = "";
+  searchResult.innerHTML = "";
+}
+
+searchBtn.addEventListener("click", searchStudents);
+clearBtn.addEventListener("click", clearSearch);
 
 // ==Draw the table and the summary ==
 function render() {
-  const term = searchBox.value.trim().toLowerCase();
-
-  const shown = students.filter(s =>
-    s.name.toLowerCase().includes(term) ||
-    s.course.toLowerCase().includes(term)
-  );
+  const shown = students;
 
   list.innerHTML = "";
 
