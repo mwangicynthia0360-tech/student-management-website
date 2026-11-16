@@ -54,8 +54,9 @@ function getVisibleStudents() {
 
   if (sortHighToLow) {
     list = list.slice().sort((a, b) => b.marks - a.marks);
-  }
+  
   return list;
+  }
 }
 
 function displayStudents(){
